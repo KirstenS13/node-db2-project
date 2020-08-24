@@ -28,7 +28,8 @@ router.get("/:id", async (req, res, next) => {
 // Create Car
 router.post("/", async (req, res, next) => {
     try {
-        const [id] = await db("cars").insert(req.body);
+        const givenCar = { VIN: req.body.VIN, make: req.body.make, model: req.body.model, mileage: req.body.mileage, transmissionType: req.body.transmissionType, titleStatus: req.body.titleStatus };
+        const [id] = await db("cars").insert(givenCar);
         const newCar = await db("cars").where("id", id).first();
 
         res.status(201).json(newCar);
@@ -36,5 +37,20 @@ router.post("/", async (req, res, next) => {
         next(err)
     }
 });
+
+// Update Car
+/* router.put("/:id", async (req, res, next) => {
+    try {
+        const updates = { VIN: req.body.VIN, make: req.body.make, model: req.body.model, mileage: req.body.mileage, transmissionType: req.body.transmissionType, titleStatus: req.body.titleStatus };
+        const updatedCarID = await db("cars").update(updates).where("id", req.params.id);
+        const updatedCar = await db("cars").where("id", req.params.id).first();
+        console.log(updatedCarID)
+        res.json(updatedCar);
+    } catch (err) {
+        next(err)
+    }
+}); */
+
+// Delete Car
 
 module.exports = router;
